@@ -26,6 +26,8 @@ dependencies:
 - text
 - containers
 - memoize
+- scotty
+- aeson
 
 library:
   source-dirs: src
@@ -33,6 +35,15 @@ library:
 executables:
   anagram-service-exe:
     main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - anagram-service
+  anagram-service-api:
+    main:                Api.hs
     source-dirs:         app
     ghc-options:
     - -threaded
