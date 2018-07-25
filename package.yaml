@@ -28,6 +28,9 @@ dependencies:
 - memoize
 - scotty
 - aeson
+- lens
+- wreq
+- bytestring
 
 library:
   source-dirs: src
@@ -42,6 +45,8 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - anagram-service
+    - wreq
+    - lens
   anagram-service-api:
     main:                Api.hs
     source-dirs:         app
