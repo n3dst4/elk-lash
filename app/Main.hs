@@ -5,7 +5,8 @@ module Main (main) where
 import           Control.Monad              (forever)
 import           Data.ByteString.Lazy.Char8 (unpack)
 import           Data.Char                  (isLower)
-import           Lib                        (Alphabet, getAnagrams, getSubgrams,
+import           Lib                        (Alphabet, getAnagrams,
+                                             getAnagramsOptimized, getSubgrams,
                                              mkTree)
 --import qualified Network.Wreq               as Wr
 import           System.Console.GetOpt      (ArgDescr (NoArg),
@@ -28,13 +29,14 @@ goodWord = do
   return (len && lc)
 
 -- cmd line option flags
-data Flag = SubgramFlag | AnagramFlag deriving (Eq, Show)
+data Flag = SubgramFlag | AnagramFlag | OptimizedFlag deriving (Eq, Show)
 
 -- option definitions
 options :: [OptDescr Flag]
 options =
   [ Option ['s'] ["subgram"] (NoArg SubgramFlag) "return subgrams instead of anagrams"
   , Option ['a'] ["anagram"] (NoArg AnagramFlag) "return anagrams (default)"
+  , Option ['o'] ["anagram"] (NoArg OptimizedFlag) "return anagrams (optimized)"
   ]
 
 main :: IO ()
@@ -51,10 +53,11 @@ main = do
   args <- getArgs
   let (opts, nonOpts, _) = getOpt Permute options args
       -- i know we only have these two but this is an exercise in futureproofing
-      modeOpts = filter (`elem` [SubgramFlag, AnagramFlag]) opts
+      modeOpts = filter (`elem` [SubgramFlag, AnagramFlag, OptimizedFlag]) opts
       (action, description) = case reverse modeOpts of
-        SubgramFlag : _ -> (getSubgrams, "Subgrams")
-        _               -> (getAnagrams, "Anagrams")
+        SubgramFlag : _   -> (getSubgrams, "Subgrams")
+        OptimizedFlag : _ -> (getAnagramsOptimized, "Optimized")
+        _                 -> (getAnagrams, "Anagrams")
       text = concat nonOpts
       results = action aToZ text tree
   traverse putStrLn results

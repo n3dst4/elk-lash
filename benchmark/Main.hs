@@ -24,8 +24,6 @@ main = do
     words = filter goodWord . lines $ text
     tree = mkTree aToZ words
   defaultMain
-    [ bench "standard algo NF" $ nf (getAnagrams aToZ "londonzoospa" ) tree
-    , bench "standard algo WHNF" $ whnf (getAnagrams aToZ "londonzoospa" ) tree
-    , bench "optimized algo NF" $ nf (getAnagramsOptimized aToZ "londonzoospa" ) tree
-    , bench "optimized algo WHNF" $ whnf (getAnagramsOptimized aToZ "londonzoospa" ) tree
+    [ bench "standard algo" $ nf (getAnagrams aToZ "londonzoospa" ) tree
+    , bench "optimized algo" $ nf (getAnagramsOptimized aToZ "londonzoospa" ) tree
     ]

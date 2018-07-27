@@ -188,13 +188,4 @@ main = hspec $ do
       sort (getAnagramsOptimized aToE "abc" tree) `shouldBe` sort (fromList ["abc", "cba"])
     it "finds multi-word anagrams" $
       sort (getAnagramsOptimized aToE "ab cb cd" tree) `shouldBe`
-        sort (fromList [
-          "abc bcd",
-          "abc dbc",
-          "bcd abc",
-          "bcd cba",
-          "cba bcd",
-          "cba dbc",
-          "dbc abc",
-          "dbc cba"
-          ])
+        sort (fromList ["bcd abc","bcd cba","dbc abc","dbc cba"])

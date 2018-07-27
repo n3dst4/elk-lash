@@ -1,4 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedLists   #-}
 
 module Lib
     ( addWord
@@ -20,7 +21,7 @@ import           Data.Foldable     (fold)
 import           Data.List         (sort, span)
 import           Data.Sequence     (Seq (..), adjust, empty, fromList, index,
                                     replicate, take, update, (><), (|>))
-import qualified Data.Sequence     as S (filter)
+import qualified Data.Sequence     as S (filter, zip)
 import           Data.Text         (Text)
 import qualified Data.Text         as T
 import           Prelude           hiding (empty, replicate, take)
@@ -122,17 +123,23 @@ getAnagrams alphabet haystack tree = getAnagrams' $ mkHisto alphabet haystack
         subgrams >>= go
 
 getAnagramsOptimized :: Alphabet -> String -> SubgramTree -> Seq String
-getAnagramsOptimized alphabet haystack tree = getAnagrams' $ mkHisto alphabet haystack
+getAnagramsOptimized alphabet haystack tree = getAnagrams' [] $ mkHisto alphabet haystack
   where
-    getAnagrams' :: Histogram -> Seq String
-    getAnagrams' histo =
+    stackSeq :: Seq a -> Seq (a, Seq a)
+    stackSeq xs =
       let
-        subgrams = getSubgrams' empty histo tree
-        go :: String -> Seq String
-        go word =
+        indexed = S.zip [0 .. length xs] xs
+        f (i, x) = (x, take i xs)
+      in fmap f indexed
+    getAnagrams' :: Seq String -> Histogram -> Seq String
+    getAnagrams' excl histo =
+      let
+        subgrams = stackSeq $ getSubgrams' excl histo tree
+        go :: (String, Seq String) -> Seq String
+        go (word, excl') =
           if all (== 0) histo'
             then pure word
-            else fmap ((word ++ " ") ++) (getAnagrams' histo')
+            else fmap ((word ++ " ") ++) (getAnagrams' (excl >< excl') histo')
           where
             histo' = zipWith subtract (mkHisto alphabet word) histo
       in
