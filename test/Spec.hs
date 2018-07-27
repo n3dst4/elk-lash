@@ -1,4 +1,3 @@
-
 import           Data.Sequence (Seq (..), adjust, empty, fromList, index,
                                 replicate, sort, update, (><), (|>))
 import           Lib
@@ -171,4 +170,31 @@ main = hspec $ do
       sort (getAnagrams aToE "abc" tree) `shouldBe` sort (fromList ["abc", "cba"])
     it "finds multi-word anagrams" $
       sort (getAnagrams aToE "ab cb cd" tree) `shouldBe`
-        sort (fromList ["abc bcd","abc dbc","bcd abc","bcd cba","cba bcd","cba dbc","dbc abc","dbc cba"])
+        sort (fromList [
+          "abc bcd",
+          "abc dbc",
+          "bcd abc",
+          "bcd cba",
+          "cba bcd",
+          "cba dbc",
+          "dbc abc",
+          "dbc cba"
+          ])
+  describe "getAnagramsOptimized" $ do
+    let
+      words = ["abc", "cba", "abcde", "bcd", "dbc", "de", "dee", "deed"]
+      tree = mkTree aToE words
+    it "finds exact one-word anagrams" $
+      sort (getAnagramsOptimized aToE "abc" tree) `shouldBe` sort (fromList ["abc", "cba"])
+    it "finds multi-word anagrams" $
+      sort (getAnagramsOptimized aToE "ab cb cd" tree) `shouldBe`
+        sort (fromList [
+          "abc bcd",
+          "abc dbc",
+          "bcd abc",
+          "bcd cba",
+          "cba bcd",
+          "cba dbc",
+          "dbc abc",
+          "dbc cba"
+          ])

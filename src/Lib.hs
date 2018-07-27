@@ -3,6 +3,7 @@
 module Lib
     ( addWord
     , getAnagrams
+    , getAnagramsOptimized
     , getSubgrams
     , mkHisto
     , mkTree
@@ -13,17 +14,16 @@ module Lib
     , SubgramTreeException (..)
     ) where
 
-import           Control.Exception     (Exception, throw)
-import           Data.Char             (toLower)
-import           Data.Foldable         (fold)
-import           Data.Function.Memoize (memoize)
-import           Data.List             (sort, span)
-import           Data.Sequence         (Seq (..), adjust, empty, fromList,
-                                        index, replicate, take, update, (><),
-                                        (|>))
-import           Data.Text             (Text)
-import qualified Data.Text             as T
-import           Prelude               hiding (empty, replicate, take)
+import           Control.Exception (Exception, throw)
+import           Data.Char         (toLower)
+import           Data.Foldable     (fold)
+import           Data.List         (sort, span)
+import           Data.Sequence     (Seq (..), adjust, empty, fromList, index,
+                                    replicate, take, update, (><), (|>))
+import qualified Data.Sequence     as S (filter)
+import           Data.Text         (Text)
+import qualified Data.Text         as T
+import           Prelude           hiding (empty, replicate, take)
 
 -- TYPES
 
@@ -92,29 +92,48 @@ mkTree alphabet = foldr (addWord alphabet) (Node empty)
 
 -- | find all the subgrams of a word from a tree
 getSubgrams :: Alphabet -> String -> SubgramTree -> Seq String
-getSubgrams alphabet haystack = getSubgrams' $ mkHisto alphabet haystack
+getSubgrams alphabet haystack = getSubgrams' empty $ mkHisto alphabet haystack
 
-getSubgrams' :: Histogram -> SubgramTree -> Seq String
-getSubgrams' (_ : _) (Leaf _)      = throw HistogramOutOfBounds
-getSubgrams' [] (Node _)           = empty
-getSubgrams' [] (Leaf words)       = words
-getSubgrams' (i : is) (Node trees) =
-  fold $ fmap (getSubgrams' is) (take (i + 1) trees)
+remove :: Eq a => Seq a -> Seq a -> Seq a
+remove xs = S.filter (not . (`elem` xs))
+
+getSubgrams' :: Seq String -> Histogram -> SubgramTree -> Seq String
+getSubgrams' _ (_ : _) (Leaf _)      = throw HistogramOutOfBounds
+getSubgrams' _ [] (Node _)           = empty
+getSubgrams' excl [] (Leaf words)       = remove excl words
+getSubgrams' excl (i : is) (Node trees) =
+  fold $ fmap (getSubgrams' excl is) (take (i + 1) trees)
 
 getAnagrams :: Alphabet -> String -> SubgramTree -> Seq String
-getAnagrams alphabet haystack tree = getAnagrams'' $ mkHisto alphabet haystack
+getAnagrams alphabet haystack tree = getAnagrams' $ mkHisto alphabet haystack
   where
     getAnagrams' :: Histogram -> Seq String
     getAnagrams' histo =
       let
-        subgrams = getSubgrams' histo tree
+        subgrams = getSubgrams' empty histo tree
         go :: String -> Seq String
         go word =
           if all (== 0) histo'
             then pure word
-            else fmap ((word ++ " ") ++) (getAnagrams'' histo')
+            else fmap ((word ++ " ") ++) (getAnagrams' histo')
           where
             histo' = zipWith subtract (mkHisto alphabet word) histo
       in
         subgrams >>= go
-    getAnagrams'' = memoize getAnagrams'
+
+getAnagramsOptimized :: Alphabet -> String -> SubgramTree -> Seq String
+getAnagramsOptimized alphabet haystack tree = getAnagrams' $ mkHisto alphabet haystack
+  where
+    getAnagrams' :: Histogram -> Seq String
+    getAnagrams' histo =
+      let
+        subgrams = getSubgrams' empty histo tree
+        go :: String -> Seq String
+        go word =
+          if all (== 0) histo'
+            then pure word
+            else fmap ((word ++ " ") ++) (getAnagrams' histo')
+          where
+            histo' = zipWith subtract (mkHisto alphabet word) histo
+      in
+        subgrams >>= go

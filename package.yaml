@@ -28,9 +28,8 @@ dependencies:
 - memoize
 - scotty
 - aeson
-- lens
-- wreq
 - bytestring
+- criterion
 
 library:
   source-dirs: src
@@ -45,11 +44,20 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - anagram-service
-    - wreq
-    - lens
   anagram-service-api:
     main:                Api.hs
     source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - anagram-service
+
+benchmarks:
+  anagrams:
+    main:               Main.hs
+    source-dirs:        benchmark
     ghc-options:
     - -threaded
     - -rtsopts

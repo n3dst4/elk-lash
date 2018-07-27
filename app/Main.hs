@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
 
-import           Control.Lens               ((^.))
+--import           Control.Lens               ((^.))
 import           Control.Monad              (forever)
 import           Data.ByteString.Lazy.Char8 (unpack)
 import           Data.Char                  (isLower)
 import           Lib                        (Alphabet, getAnagrams, getSubgrams,
                                              mkTree)
-import qualified Network.Wreq               as Wr
+--import qualified Network.Wreq               as Wr
 import           System.Console.GetOpt      (ArgDescr (NoArg),
                                              ArgOrder (Permute),
                                              OptDescr (Option), getOpt)
@@ -18,6 +18,8 @@ aToZ = ['a' .. 'z']
 
 dictUrl :: String
 dictUrl = "https://gist.githubusercontent.com/n3dst4/ac7ca7fa851a396e4269d68aaaa6ed58/raw/b1f64ca00c94a4265d66d91940a658bd705e556f/words"
+dictFile :: String
+dictFile = "./british-english-small"
 
 goodWord :: String -> Bool
 goodWord = do
@@ -37,11 +39,11 @@ options =
 
 main :: IO ()
 main = do
-  --text <- readFile "/usr/share/dict/words"
-  r <- Wr.get dictUrl
+  text <- readFile dictFile
+  --r <- Wr.get dictUrl
   let
-    textBS = r ^. Wr.responseBody
-    text = unpack textBS
+    --textBS = r ^. Wr.responseBody
+    --text = unpack textBS
     words = filter goodWord . lines $ text
     tree = mkTree aToZ words
   putStrLn $ "Finished reading dictionary (" ++ show (length words) ++ ")"
