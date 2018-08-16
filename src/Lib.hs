@@ -19,12 +19,11 @@ import           Control.Exception (Exception, throw)
 import           Data.Char         (toLower)
 import           Data.Foldable     (fold)
 import           Data.List         (sort, span)
-import           Data.Sequence     (Seq (..), adjust, empty, fromList, index,
-                                    replicate, take, update, (><), (|>))
+import           Data.Sequence     (Seq, adjust, empty,
+                                    replicate, take, (><), (|>))
 import qualified Data.Sequence     as S (filter, zip)
-import           Data.Text         (Text)
-import qualified Data.Text         as T
-import           Prelude           hiding (empty, replicate, take)
+import           Data.Text         ()
+import           Prelude           hiding (replicate, take)
 
 -- TYPES
 
@@ -101,7 +100,7 @@ remove xs = S.filter (not . (`elem` xs))
 getSubgrams' :: Seq String -> Histogram -> SubgramTree -> Seq String
 getSubgrams' _ (_ : _) (Leaf _)      = throw HistogramOutOfBounds
 getSubgrams' _ [] (Node _)           = empty
-getSubgrams' excl [] (Leaf words)       = remove excl words
+getSubgrams' excl [] (Leaf ws)       = remove excl ws
 getSubgrams' excl (i : is) (Node trees) =
   fold $ fmap (getSubgrams' excl is) (take (i + 1) trees)
 
