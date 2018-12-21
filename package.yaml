@@ -35,7 +35,7 @@ library:
   source-dirs: src
 
 executables:
-  anagram-service-exe:
+  anagram-cli:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -44,7 +44,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - anagram-service
-  anagram-service-api:
+  anagram-service:
     main:                Api.hs
     source-dirs:         app
     ghc-options:
