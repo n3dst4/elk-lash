@@ -1,6 +1,8 @@
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
 
+module Api (main) where
+
 import           Data.Aeson   (FromJSON)
 import           Data.Monoid  (mconcat)
 import           GHC.Generics (Generic)

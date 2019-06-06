@@ -5,6 +5,7 @@ module Main (main) where
 import           Control.Monad              (forever)
 import           Data.ByteString.Lazy.Char8 (unpack)
 import           Data.Char                  (isLower)
+import           Data.Foldable                  ( traverse_ )
 import           Lib                        (Alphabet, getAnagrams,
                                              getAnagramsOptimized, getSubgrams,
                                              mkTree)
@@ -41,6 +42,7 @@ options =
 
 main :: IO ()
 main = do
+  putStrLn "String"
   text <- readFile dictFile
   --r <- Wr.get dictUrl
   let
@@ -60,5 +62,5 @@ main = do
         _                 -> (getAnagrams, "Anagrams")
       text = concat nonOpts
       results = action aToZ text tree
-  traverse putStrLn results
+  traverse_ putStrLn results
   hFlush stdout

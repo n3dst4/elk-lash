@@ -21,7 +21,7 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
-- ghc-mod
+# - ghc-mod
 - hspec
 - text
 - containers
@@ -36,7 +36,7 @@ library:
 
 executables:
   anagram-cli:
-    main:                Main.hs
+    main:                Main
     source-dirs:         app
     ghc-options:
     - -threaded
@@ -45,7 +45,7 @@ executables:
     dependencies:
     - anagram-service
   anagram-service:
-    main:                Api.hs
+    main:                Api
     source-dirs:         app
     ghc-options:
     - -threaded
@@ -56,7 +56,7 @@ executables:
 
 benchmarks:
   anagrams:
-    main:               Main.hs
+    main:               Main
     source-dirs:        benchmark
     ghc-options:
     - -threaded
@@ -67,7 +67,7 @@ benchmarks:
 
 tests:
   anagram-service-test:
-    main:                Spec.hs
+    main:                Spec
     source-dirs:         test
     ghc-options:
     - -threaded
