@@ -13,7 +13,6 @@ module Lib
     , Alphabet
     , SubgramTree (..)
     , SubgramTreeException (..)
-    , foo
     ) where
 
 import           Control.Exception (Exception, throw)
@@ -145,5 +144,3 @@ getAnagramsOptimized alphabet haystack tree = getAnagrams' [] $ mkHisto alphabet
       in
         subgrams >>= go
 
-foo :: String
-foo = concat $ map (++ "!") ["foo", "bar"]

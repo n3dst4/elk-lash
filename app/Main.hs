@@ -56,7 +56,6 @@ options =
 
 main :: IO ()
 main = do
-  putStrLn "String"
   text <- readFile dictFile
   --r <- Wr.get dictUrl
   let
