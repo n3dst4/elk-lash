@@ -1,3 +1,5 @@
+module Spec (main) where
+
 import           Data.Sequence (Seq (..), adjust, empty, fromList, index,
                                 replicate, sort, update, (><), (|>))
 import           Lib
