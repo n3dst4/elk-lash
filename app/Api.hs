@@ -31,6 +31,7 @@ import           Web.Scotty                     ( ActionM(..)
                                                 )
 import           Data.Text.Lazy                 ( pack )
 
+
 newtype Request = Request { haystack :: String } deriving (Generic, Show)
 
 instance FromJSON Request
@@ -40,7 +41,7 @@ aToZ = ['a' .. 'z']
 
 
 dictFile :: String
-dictFile = "./british-english-small"
+dictFile = "./dicts/british-english-small"
 
 goodWord :: String -> Bool
 goodWord = do

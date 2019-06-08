@@ -32,7 +32,7 @@ dictUrl :: String
 dictUrl =
   "https://gist.githubusercontent.com/n3dst4/ac7ca7fa851a396e4269d68aaaa6ed58/raw/b1f64ca00c94a4265d66d91940a658bd705e556f/words"
 dictFile :: String
-dictFile = "./british-english-small"
+dictFile = "./dicts/british-english-small"
 
 goodWord :: String -> Bool
 goodWord = do

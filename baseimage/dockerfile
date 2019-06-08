@@ -1,4 +1,5 @@
-FROM ubuntu
-RUN apt-get update -y
-RUN apt-get install libgmp-dev -y
+FROM fpco/ubuntu-with-libgmp:14.04
+#RUN apt-get update -y
+#RUN apt-get install libgmp-dev -y
+ENV LANG=C.UTF-8
 
