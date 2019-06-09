@@ -1,5 +1,5 @@
+# use the standard default fpco base image
 FROM fpco/ubuntu-with-libgmp:14.04
-#RUN apt-get update -y
-#RUN apt-get install libgmp-dev -y
-ENV LANG=C.UTF-8
 
+# set the LANG so we work with utf-8 by default
+ENV LANG=C.UTF-8
