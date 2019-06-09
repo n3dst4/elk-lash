@@ -57,8 +57,11 @@ main = do
   putStrLn $ "Finished reading dictionary (" ++ show (length words) ++ ")"
 
   scotty 3000 $ do
-    get "/" $ html
-      "<h1>post {haystack: \"haystack\"} to /subgrams to get subgrams</h1>"
+    get "/" $ html $ pack
+      ("<html>" ++
+        "<h1>Subgrams service</h1>" ++ 
+        "<p>GET /subgrams/<word or phrase> to get subgrams</p>" ++
+        "</html>")
     get "/subgrams/:word" $ do
       word <- param "word"
       let subs     = getSubgrams aToZ word tree
