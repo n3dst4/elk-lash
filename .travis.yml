@@ -34,7 +34,7 @@ before_install:
 
 install:
 # Build dependencies
-# - stack docker pull
+- stack docker pull
 - stack --no-terminal --install-ghc test --only-dependencies
 
 script:
