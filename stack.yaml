@@ -69,7 +69,7 @@ extra-deps:
 # compiler-check: newer-minor
 
 docker:
-  enable: true
+  enable: false
 
 image:
   containers:
